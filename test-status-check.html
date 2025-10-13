@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Status Check</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+    }
+    button {
+      background: #0f0;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: monospace;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background: #0c0;
+    }
+    pre {
+      background: #111;
+      padding: 10px;
+      border: 1px solid #0f0;
+      overflow-x: auto;
+    }
+    .error {
+      color: #f00;
+    }
+    .success {
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Status Check Test</h1>
+  <button onclick="testStatusCheck()">Run Status Check</button>
+  <div id="output"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+
+    async function testStatusCheck() {
+      const output = document.getElementById('output');
+      output.innerHTML = '<p>Running status check...</p>';
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/check-provider-status`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          output.innerHTML = `
+            <p class="success">✓ Status check successful!</p>
+            <h3>Results:</h3>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        } else {
+          output.innerHTML = `
+            <p class="error">✗ Status check failed</p>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        }
+      } catch (error) {
+        output.innerHTML = `
+          <p class="error">✗ Error: ${error.message}</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

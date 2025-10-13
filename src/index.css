@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark body {
+    @apply bg-black text-white antialiased;
+  }
+
+  .light body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+
+  .light {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  .light .bg-gray-900 {
+    background-color: #EDEDED !important;
+    @apply border-gray-300;
+  }
+
+  .light .bg-gray-800 {
+    background-color: #EDEDED !important;
+    @apply border-gray-300;
+  }
+
+  .light .bg-black {
+    @apply bg-gray-50;
+  }
+
+  .light .text-white {
+    @apply text-gray-900;
+  }
+
+  .light .text-gray-400 {
+    @apply text-gray-600;
+  }
+
+  .light .text-gray-300 {
+    @apply text-gray-700;
+  }
+
+  .light .text-gray-500 {
+    @apply text-gray-600;
+  }
+
+  .light .border-gray-800 {
+    @apply border-gray-300;
+  }
+
+  .light .border-gray-700 {
+    @apply border-gray-300;
+  }
+
+  .light .hover\:bg-gray-800:hover {
+    background-color: #E0E0E0 !important;
+  }
+
+  .light .hover\:bg-gray-700:hover {
+    background-color: #E0E0E0 !important;
+  }
+
+  .light .hover\:text-white:hover {
+    @apply text-gray-900;
+  }
+
+  .light .hover\:border-gray-600:hover {
+    @apply border-gray-400;
+  }
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-lg;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
+
+.light ::-webkit-scrollbar-track {
+  @apply bg-gray-200;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-lg;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+  }
+
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .min-touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-top: max(env(safe-area-inset-top), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+    padding-left: max(env(safe-area-inset-left), 0px);
+  }
+}
