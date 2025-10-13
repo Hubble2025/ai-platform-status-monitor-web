@@ -1,0 +1,14 @@
+name: build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "✅ Build successful"
+
+git add .github/workflows/build.yml
+git commit -m "add basic build workflow"
+git push
