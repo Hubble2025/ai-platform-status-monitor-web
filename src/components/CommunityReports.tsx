@@ -37,11 +37,11 @@ export function CommunityReports({ providerId }: CommunityReportsProps) {
 
   const getCategoryLabel = (category: IssueReport['category']) => {
     const labels = {
-      performance: 'Performance',
-      outage: 'Outage',
-      api_issues: 'API Issues',
-      feature_problems: 'Features',
-      other: 'Other'
+      performance: t('report.categories.performance'),
+      outage: t('report.categories.outage'),
+      api_issues: t('report.categories.api_issues'),
+      feature_problems: t('report.categories.feature_problems'),
+      other: t('report.categories.other')
     };
     return labels[category];
   };
@@ -58,11 +58,11 @@ export function CommunityReports({ providerId }: CommunityReportsProps) {
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffMins < 60) return `${diffMins}m ${t('communityReports.ago')}`;
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffHours < 24) return `${diffHours}h ${t('communityReports.ago')}`;
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays}d ago`;
+    return `${diffDays}d ${t('communityReports.ago')}`;
   };
 
   if (loading) {
@@ -82,10 +82,10 @@ export function CommunityReports({ providerId }: CommunityReportsProps) {
       <div className={`rounded-lg p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex items-center gap-2 mb-2">
           <AlertCircle className="w-5 h-5" />
-          <h3 className="font-semibold">Community Reports</h3>
+          <h3 className="font-semibold">{t('communityReports.title')}</h3>
         </div>
         <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-          No active reports from the community
+          {t('communityReports.noReports')}
         </p>
       </div>
     );
@@ -96,10 +96,10 @@ export function CommunityReports({ providerId }: CommunityReportsProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
-          <h3 className="font-semibold">Community Reports</h3>
+          <h3 className="font-semibold">{t('communityReports.title')}</h3>
         </div>
         <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-          {reports.length} active report{reports.length > 1 ? 's' : ''}
+          {reports.length} {reports.length > 1 ? t('communityReports.activeReports') : t('communityReports.activeReport')}
         </span>
       </div>
 
@@ -120,7 +120,7 @@ export function CommunityReports({ providerId }: CommunityReportsProps) {
                   </span>
                   {report.status === 'validated' && (
                     <span className={`text-xs px-2 py-1 rounded ${theme === 'dark' ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-700'}`}>
-                      Validated
+                      {t('communityReports.validated')}
                     </span>
                   )}
                 </div>

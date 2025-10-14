@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 import { translations, type Language } from '../lib/translations';
+import { formatDate, formatRelativeTime } from '../lib/dateFormatter';
 
 type Theme = 'light' | 'dark';
 
@@ -10,6 +11,9 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  isDarkMode: boolean;
+  formatDate: (date: Date | string, options?: Intl.DateTimeFormatOptions) => string;
+  formatRelativeTime: (date: Date | string) => string;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -92,8 +96,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return translations[language][key] || key;
   }
 
+  const isDarkMode = theme === 'dark';
+
+  const formatDateWithLocale = (date: Date | string, options?: Intl.DateTimeFormatOptions) => {
+    return formatDate(date, language, options);
+  };
+
+  const formatRelativeTimeWithLocale = (date: Date | string) => {
+    return formatRelativeTime(date, language);
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, language, setTheme, setLanguage, t }}>
+    <ThemeContext.Provider value={{
+      theme,
+      language,
+      setTheme,
+      setLanguage,
+      t,
+      isDarkMode,
+      formatDate: formatDateWithLocale,
+      formatRelativeTime: formatRelativeTimeWithLocale
+    }}>
       {children}
     </ThemeContext.Provider>
   );

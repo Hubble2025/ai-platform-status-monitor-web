@@ -29,10 +29,10 @@ export function FeedbackVoting({ providerId }: FeedbackVotingProps) {
     const result = await submitVote(providerId, voteType);
 
     if (result.success) {
-      setMessage({ type: 'success', text: 'Thanks for your feedback!' });
+      setMessage({ type: 'success', text: t('feedback.thanksForFeedback') });
       await loadStats();
     } else {
-      setMessage({ type: 'error', text: result.error || 'Failed to submit vote' });
+      setMessage({ type: 'error', text: result.error || t('feedback.failedToSubmit') });
     }
 
     setVoting(false);
@@ -46,14 +46,14 @@ export function FeedbackVoting({ providerId }: FeedbackVotingProps) {
 
   return (
     <div className={`rounded-lg p-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-      <h3 className="text-sm font-semibold mb-3">Community Feedback</h3>
+      <h3 className="text-sm font-semibold mb-3">{t('feedback.communityFeedback')}</h3>
 
       {hasIssues && stats.total_reports > 0 && (
         <div className={`flex items-center gap-2 mb-3 p-2 rounded ${theme === 'dark' ? 'bg-orange-900/20 text-orange-400' : 'bg-orange-50 text-orange-700'}`}>
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span className="text-xs">
-            {stats.total_reports} user{stats.total_reports > 1 ? 's' : ''} reported issues
-            {stats.critical_reports > 0 && ` (${stats.critical_reports} critical)`}
+            {stats.total_reports} {stats.total_reports > 1 ? t('provider.userReports') : t('provider.userReport')} {t('feedback.reportedIssues')}
+            {stats.critical_reports > 0 && ` (${stats.critical_reports} ${t('feedback.critical')})`}
           </span>
         </div>
       )}
@@ -101,7 +101,7 @@ export function FeedbackVoting({ providerId }: FeedbackVotingProps) {
 
       {totalVotes > 0 && (
         <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-          {totalVotes} vote{totalVotes > 1 ? 's' : ''} in last 2 hours
+          {totalVotes} {totalVotes > 1 ? t('feedback.votes') : t('feedback.vote')} {t('feedback.votesInLast2Hours')}
         </p>
       )}
 

@@ -79,10 +79,10 @@ export function InstallPrompt() {
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-white text-lg mb-1">
-                Install AI Monitor
+                {t('install.title')}
               </h3>
               <p className="text-blue-100 text-sm leading-relaxed">
-                Get instant notifications about AI platform status changes. Works offline!
+                {t('install.description')}
               </p>
             </div>
             <button
@@ -98,13 +98,13 @@ export function InstallPrompt() {
               onClick={handleInstall}
               className="flex-1 px-4 py-2.5 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors shadow-lg"
             >
-              Install Now
+              {t('install.installNow')}
             </button>
             <button
               onClick={handleDismiss}
               className="px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors"
             >
-              Later
+              {t('install.later')}
             </button>
           </div>
         </div>

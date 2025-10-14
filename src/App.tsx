@@ -58,12 +58,12 @@ function App() {
             <Changelog onBack={() => setView({ type: 'dashboard' })} />
           ) : view.type === 'impressum' ? (
             <Impressum onBack={() => setView({ type: 'dashboard' })} />
-          ) : (
+          ) : view.type === 'provider' ? (
             <ProviderDetail
               slug={view.slug}
               onBack={() => setView({ type: 'dashboard' })}
             />
-          )}
+          ) : null}
         </Suspense>
       </main>
 

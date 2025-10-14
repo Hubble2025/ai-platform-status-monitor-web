@@ -3,6 +3,7 @@ import { Activity, AlertCircle, CheckCircle, XCircle, Sparkles, TrendingUp, Star
 import { IncidentTimeline } from './IncidentTimeline';
 import { useTouchGestures } from '../hooks/useTouchGestures';
 import { getFeedbackStats, type FeedbackStats } from '../services/feedbackService';
+import { useTheme } from '../contexts/ThemeContext';
 import type { Provider, Incident } from '../lib/database.types';
 
 interface ProviderCardProps {
@@ -16,6 +17,7 @@ interface ProviderCardProps {
 }
 
 export function ProviderCard({ provider, status, activeIncidents, incidents, onClick, onFavorite, isFavorite }: ProviderCardProps) {
+  const { t } = useTheme();
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [feedbackStats, setFeedbackStats] = useState<FeedbackStats | null>(null);
@@ -70,9 +72,9 @@ export function ProviderCard({ provider, status, activeIncidents, incidents, onC
   };
 
   const getStatusText = () => {
-    if (status === 'operational') return 'All Systems Operational';
-    if (activeIncidents === 1) return '1 Active Incident';
-    return `${activeIncidents} Active Incidents`;
+    if (status === 'operational') return t('provider.allSystemsOperational');
+    if (activeIncidents === 1) return `1 ${t('provider.activeIncident')}`;
+    return `${activeIncidents} ${t('provider.activeIncidents')}`;
   };
 
   return (
@@ -102,7 +104,7 @@ export function ProviderCard({ provider, status, activeIncidents, incidents, onC
             {provider.auto_discovered && (
               <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-900/30 border border-blue-800 text-blue-400 text-xs font-medium rounded">
                 <Sparkles className="w-3 h-3" />
-                Auto
+                {t('provider.autoDiscovered')}
               </span>
             )}
             {provider.reliability_score !== undefined && provider.reliability_score >= 0.95 && (
@@ -135,11 +137,11 @@ export function ProviderCard({ provider, status, activeIncidents, incidents, onC
           <MessageSquare className="w-4 h-4 text-orange-400 flex-shrink-0" />
           <span className="text-xs text-orange-400">
             {feedbackStats.total_reports > 0 && (
-              <span className="font-medium">{feedbackStats.total_reports} user report{feedbackStats.total_reports > 1 ? 's' : ''}</span>
+              <span className="font-medium">{feedbackStats.total_reports} {feedbackStats.total_reports > 1 ? t('provider.userReports') : t('provider.userReport')}</span>
             )}
             {feedbackStats.total_reports > 0 && (feedbackStats.issues_votes > 0 || feedbackStats.down_votes > 0) && ' • '}
             {(feedbackStats.issues_votes > 0 || feedbackStats.down_votes > 0) && (
-              <span>{feedbackStats.issues_votes + feedbackStats.down_votes} issue vote{(feedbackStats.issues_votes + feedbackStats.down_votes) > 1 ? 's' : ''}</span>
+              <span>{feedbackStats.issues_votes + feedbackStats.down_votes} {(feedbackStats.issues_votes + feedbackStats.down_votes) > 1 ? t('provider.issueVotes') : t('provider.issueVote')}</span>
             )}
           </span>
         </div>
@@ -147,7 +149,7 @@ export function ProviderCard({ provider, status, activeIncidents, incidents, onC
 
       {provider.last_checked && (
         <div className="text-xs text-gray-500">
-          Last checked: {new Date(provider.last_checked).toLocaleString()}
+          {t('provider.lastChecked')}: {new Date(provider.last_checked).toLocaleString()}
         </div>
       )}
       </button>
