@@ -31,7 +31,7 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
     setError(null);
 
     if (!formData.title.trim() || !formData.description.trim()) {
-      setError(t('report.fillRequired'));
+      setError('Please fill in all required fields');
       setSubmitting(false);
       return;
     }
@@ -70,9 +70,9 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold mb-2">{t('report.reportSubmitted')}</h3>
+            <h3 className="text-lg font-semibold mb-2">Report Submitted!</h3>
             <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-              {t('report.thankYou')}
+              Thank you for helping the community
             </p>
           </div>
         </div>
@@ -87,7 +87,7 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">{t('report.reportIssue')} - {providerName}</h2>
+          <h2 className="text-xl font-bold">Report Issue - {providerName}</h2>
           <button
             onClick={onClose}
             className={`p-2 rounded-lg transition-colors ${
@@ -101,7 +101,7 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.category')} <span className="text-red-500">{t('report.required')}</span>
+              Category <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.category}
@@ -112,17 +112,17 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
-              <option value="performance">{t('report.categories.performance')}</option>
-              <option value="outage">{t('report.categories.outage')}</option>
-              <option value="api_issues">{t('report.categories.api_issues')}</option>
-              <option value="feature_problems">{t('report.categories.feature_problems')}</option>
-              <option value="other">{t('report.categories.other')}</option>
+              <option value="performance">Performance Issues</option>
+              <option value="outage">Service Outage</option>
+              <option value="api_issues">API Issues</option>
+              <option value="feature_problems">Feature Problems</option>
+              <option value="other">Other</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.severity')} <span className="text-red-500">{t('report.required')}</span>
+              Severity <span className="text-red-500">*</span>
             </label>
             <div className="flex gap-2">
               {(['minor', 'major', 'critical'] as const).map(severity => (
@@ -150,13 +150,13 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.issueTitle')} <span className="text-red-500">{t('report.required')}</span>
+              Issue Title <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={e => setFormData({ ...formData, title: e.target.value })}
-              placeholder={t('report.briefDescription')}
+              placeholder="Brief description of the issue"
               maxLength={100}
               className={`w-full px-4 py-2 rounded-lg border ${
                 theme === 'dark'
@@ -168,12 +168,12 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.description')} <span className="text-red-500">{t('report.required')}</span>
+              Description <span className="text-red-500">*</span>
             </label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
-              placeholder={t('report.detailedDescription')}
+              placeholder="Detailed description of the issue you're experiencing..."
               rows={4}
               maxLength={500}
               className={`w-full px-4 py-2 rounded-lg border resize-none ${
@@ -183,19 +183,19 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
               }`}
             />
             <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              {formData.description.length}/500 {t('report.characters')}
+              {formData.description.length}/500 characters
             </p>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.affectedFeatures')}
+              Affected Features (optional)
             </label>
             <input
               type="text"
               value={formData.affected_features}
               onChange={e => setFormData({ ...formData, affected_features: e.target.value })}
-              placeholder={t('report.affectedFeaturesPlaceholder')}
+              placeholder="e.g., GPT-4, Image Generation (comma separated)"
               className={`w-full px-4 py-2 rounded-lg border ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
@@ -206,13 +206,13 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              {t('report.email')}
+              Email (optional)
             </label>
             <input
               type="email"
               value={formData.contact_email}
               onChange={e => setFormData({ ...formData, contact_email: e.target.value })}
-              placeholder={t('report.emailPlaceholder')}
+              placeholder="your@email.com (for updates)"
               className={`w-full px-4 py-2 rounded-lg border ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
@@ -240,14 +240,14 @@ export function ReportIssueModal({ providerId, providerName, onClose }: ReportIs
                   : 'border-gray-300 hover:bg-gray-50'
               }`}
             >
-              {t('common.cancel')}
+              Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
               className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? t('report.submitting') : t('report.submitReport')}
+              {submitting ? 'Submitting...' : 'Submit Report'}
             </button>
           </div>
         </form>

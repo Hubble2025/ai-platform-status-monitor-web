@@ -55,7 +55,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
     try {
       await pushNotificationService.subscribe(preferences);
       setIsSubscribed(true);
-      setSuccess(t('notifications.enabled'));
+      setSuccess('Push notifications enabled successfully!');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to enable notifications');
@@ -70,7 +70,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
     try {
       await pushNotificationService.unsubscribe();
       setIsSubscribed(false);
-      setSuccess(t('notifications.disabled'));
+      setSuccess('Push notifications disabled successfully!');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to disable notifications');
@@ -89,7 +89,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
         await pushNotificationService.subscribe(preferences);
         setIsSubscribed(true);
       }
-      setSuccess(t('notifications.updated'));
+      setSuccess('Notification preferences updated!');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update preferences');
@@ -102,7 +102,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
     setError(null);
     try {
       await pushNotificationService.testNotification();
-      setSuccess(t('notifications.testSent'));
+      setSuccess('Test notification sent!');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send test notification');
@@ -142,7 +142,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
           </h3>
         </div>
         <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-          {t('notifications.notSupported')}
+          Push notifications are not supported in your browser. Please use a modern browser like Chrome, Firefox, or Edge.
         </p>
       </div>
     );
@@ -154,7 +154,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
         <div className="flex items-center gap-3">
           <Bell className="w-6 h-6 text-blue-500" />
           <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            {t('notifications.title')}
+            Push Notifications
           </h3>
         </div>
         <button
@@ -170,7 +170,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
           } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          {isLoading ? t('notifications.loading') : isSubscribed ? t('notifications.disable') : t('notifications.enable')}
+          {isLoading ? 'Loading...' : isSubscribed ? 'Disable' : 'Enable'}
         </button>
       </div>
 
@@ -191,7 +191,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
       <div className="space-y-6">
         <div>
           <label className={`block text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {t('notifications.severityFilter')}
+            Severity Filter
           </label>
           <div className="flex gap-2">
             {(['critical', 'major', 'all'] as const).map((severity) => (
@@ -216,7 +216,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
 
         <div>
           <label className={`block text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {t('notifications.notificationEvents')}
+            Notification Events
           </label>
           <div className="space-y-2">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -229,7 +229,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                 className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>
-                {t('notifications.notifyOnStart')}
+                Notify when incident starts
               </span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
@@ -242,7 +242,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                 className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>
-                {t('notifications.notifyOnResolved')}
+                Notify when incident resolved
               </span>
             </label>
           </div>
@@ -251,7 +251,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
         <div>
           <div className="flex items-center justify-between mb-3">
             <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              {t('notifications.monitoredProviders')} ({preferences.providerIds.length === 0 ? t('search.all') : preferences.providerIds.length})
+              Monitored Providers ({preferences.providerIds.length === 0 ? 'All' : preferences.providerIds.length})
             </label>
             <div className="flex gap-2">
               <button
@@ -262,7 +262,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {t('notifications.selectAll')}
+                Select All
               </button>
               <button
                 onClick={clearAllProviders}
@@ -272,7 +272,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {t('notifications.clear')}
+                Clear
               </button>
             </div>
           </div>
@@ -281,7 +281,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
           }`}>
             {providers.length === 0 ? (
               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                {t('notifications.noProviders')}
+                No providers available
               </p>
             ) : (
               providers.map((provider) => (
@@ -304,8 +304,8 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
           </div>
           <p className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
             {preferences.providerIds.length === 0
-              ? t('notifications.allMonitored')
-              : `${t('notifications.monitoring')} ${preferences.providerIds.length} ${preferences.providerIds.length !== 1 ? t('notifications.providers') : t('notifications.provider')}`}
+              ? 'All providers are monitored'
+              : `Monitoring ${preferences.providerIds.length} provider${preferences.providerIds.length !== 1 ? 's' : ''}`}
           </p>
         </div>
 
@@ -319,7 +319,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {isLoading ? t('notifications.saving') : t('notifications.savePreferences')}
+            {isLoading ? 'Saving...' : 'Save Preferences'}
           </button>
           {isSubscribed && (
             <button
@@ -331,7 +331,7 @@ export function NotificationSettings({ providers }: NotificationSettingsProps) {
               }`}
             >
               <TestTube2 className="w-4 h-4" />
-              {t('notifications.test')}
+              Test
             </button>
           )}
         </div>
