@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from '../contexts/ThemeContext';
 import { ArrowLeft, Plus, Edit, Wrench, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Changelog } from '../lib/database.types';
@@ -19,10 +20,10 @@ export function Changelog({ onBack }: ChangelogProps) {
         version: '1.11',
         release_date: '2025-10-20T10:00:00Z',
         changes: [
-          { id: 'new-feature-1', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Added new Changelog entry and updated versioning.' },
-          { id: 'lang-switch-fix', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'fixed', category: 'Bugfix', description: 'Ensured Language Switch affects all text content and new text content globally.' },
-          { id: 'discovery-tabs', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Implemented Discovery and Suggest Platform tabs with translations.' },
-          { id: 'italian-lang', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Added Italian as a new language option.' },
+          { id: 'new-feature-1', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_new_entry' },
+          { id: 'lang-switch-fix', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'fixed', category: 'bugfix', description: 'changelog.description.v1_11_lang_switch_fix' },
+          { id: 'discovery-tabs', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_discovery_tabs' },
+          { id: 'italian-lang', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_italian_lang' },
         ],
       },
     ]);
@@ -110,10 +111,12 @@ loadChangelog();
     }
   };
 
+  const { t } = useTranslation();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-400">Loading changelog...</div>
+        <div className="text-gray-400">{t('common.loading')}</div>
       </div>
     );
   }
@@ -125,12 +128,12 @@ loadChangelog();
         className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back
+        {t('common.back')}
       </button>
 
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Changelog</h1>
-        <p className="text-gray-400">Track all updates, additions, and fixes to the platform</p>
+        <h1 className="text-3xl font-bold text-white mb-2">{t('changelog.title')}</h1>
+        <p className="text-gray-400">{t('changelog.subtitle')}</p>
       </div>
 
       <div className="space-y-6">
@@ -139,7 +142,7 @@ loadChangelog();
             <div className="flex items-baseline gap-3 mb-4">
               <h2 className="text-2xl font-bold text-white">v{release.version}</h2>
               <span className="text-sm text-gray-400">
-                {new Date(release.release_date).toLocaleDateString('de-DE', {
+                {new Date(release.release_date).toLocaleDateString(t('common.locale'), {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -156,14 +159,14 @@ loadChangelog();
                   <div key={type}>
                     <h3 className={`text-sm font-semibold uppercase mb-2 flex items-center gap-2 ${getTypeColor(type)}`}>
                       {getTypeIcon(type)}
-                      {type}
+                      {t(`changelog.type.${type}`)}
                     </h3>
                     <ul className="space-y-1 ml-6">
                       {items.map((item) => (
                         <li key={item.id} className="text-gray-300 text-sm">
                           <span className="text-gray-500 mr-2">•</span>
-                          <span className="text-gray-500 text-xs uppercase mr-2">[{item.category}]</span>
-                          {item.description}
+                          <span className="text-gray-500 text-xs uppercase mr-2">[{t(`changelog.category.${item.category}`)}]</span>
+                          {t(item.description)}
                         </li>
                       ))}
                     </ul>
@@ -173,13 +176,13 @@ loadChangelog();
             </div>
           </div>
         ))}
-      </div>
 
-      {changelog.length === 0 && (
-        <div className="text-center py-12 bg-gray-900 border border-gray-800 rounded-lg">
-          <p className="text-gray-400">No changelog entries yet</p>
-        </div>
-      )}
+        {changelog.length === 0 && (
+          <div className="text-center py-12 bg-gray-900 border border-gray-800 rounded-lg">
+            <p className="text-gray-400">{t('changelog.noEntries')}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
