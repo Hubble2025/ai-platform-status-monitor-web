@@ -14,11 +14,22 @@ interface GroupedChangelog {
 }
 
 export function Changelog({ onBack }: ChangelogProps) {
-  const [changelog, setChangelog] = useState<GroupedChangelog[]>([]);
+    const [changelog, setChangelog] = useState<GroupedChangelog[]>([
+      {
+        version: '1.11',
+        release_date: '2025-10-20T10:00:00Z',
+        changes: [
+          { id: 'new-feature-1', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Added new Changelog entry and updated versioning.' },
+          { id: 'lang-switch-fix', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'fixed', category: 'Bugfix', description: 'Ensured Language Switch affects all text content and new text content globally.' },
+          { id: 'discovery-tabs', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Implemented Discovery and Suggest Platform tabs with translations.' },
+          { id: 'italian-lang', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'Feature', description: 'Added Italian as a new language option.' },
+        ],
+      },
+    ]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadChangelog();
+loadChangelog();
   }, []);
 
   async function loadChangelog() {
@@ -26,13 +37,13 @@ export function Changelog({ onBack }: ChangelogProps) {
       const { data, error } = await supabase
         .from('changelog')
         .select('*')
-        .order('release_date', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order("release_date", { ascending: true })
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
 
       const grouped = groupByVersion(data || []);
-      setChangelog(grouped);
+      setChangelog(prev => [...grouped, ...prev]); // Add new entries to the beginning
     } catch (error) {
       console.error('Failed to load changelog:', error);
     } finally {
@@ -54,7 +65,19 @@ export function Changelog({ onBack }: ChangelogProps) {
       groups.get(item.version)!.changes.push(item);
     }
 
-    return Array.from(groups.values());
+        let sortedGroups = Array.from(groups.values()).sort((a, b) => {
+          return new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
+        });
+
+        const v110EntryIndex = sortedGroups.findIndex(group => group.version === '1.10');
+
+        if (v110EntryIndex > -1) {
+          const v110Entry = sortedGroups.splice(v110EntryIndex, 1)[0];
+          // Insert v1.10 at the second to last position
+          sortedGroups.splice(sortedGroups.length - 1, 0, v110Entry);
+        }
+
+        return sortedGroups;
   }
 
   const getTypeIcon = (type: string) => {
