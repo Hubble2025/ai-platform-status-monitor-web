@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from '../contexts/ThemeContext';
 import { ArrowLeft, Plus, Edit, Wrench, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Changelog } from '../lib/database.types';
@@ -15,22 +14,11 @@ interface GroupedChangelog {
 }
 
 export function Changelog({ onBack }: ChangelogProps) {
-    const [changelog, setChangelog] = useState<GroupedChangelog[]>([
-      {
-        version: '1.11',
-        release_date: '2025-10-20T10:00:00Z',
-        changes: [
-          { id: 'new-feature-1', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_new_entry' },
-          { id: 'lang-switch-fix', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'fixed', category: 'bugfix', description: 'changelog.description.v1_11_lang_switch_fix' },
-          { id: 'discovery-tabs', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_discovery_tabs' },
-          { id: 'italian-lang', version: '1.11', release_date: '2025-10-20T10:00:00Z', type: 'added', category: 'feature', description: 'changelog.description.v1_11_italian_lang' },
-        ],
-      },
-    ]);
+  const [changelog, setChangelog] = useState<GroupedChangelog[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-loadChangelog();
+    loadChangelog();
   }, []);
 
   async function loadChangelog() {
@@ -38,13 +26,13 @@ loadChangelog();
       const { data, error } = await supabase
         .from('changelog')
         .select('*')
-        .order("release_date", { ascending: true })
-        .order("created_at", { ascending: true });
+        .order('release_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
 
       const grouped = groupByVersion(data || []);
-      setChangelog(prev => [...grouped, ...prev]); // Add new entries to the beginning
+      setChangelog(grouped);
     } catch (error) {
       console.error('Failed to load changelog:', error);
     } finally {
@@ -66,19 +54,7 @@ loadChangelog();
       groups.get(item.version)!.changes.push(item);
     }
 
-        let sortedGroups = Array.from(groups.values()).sort((a, b) => {
-          return new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
-        });
-
-        const v110EntryIndex = sortedGroups.findIndex(group => group.version === '1.10');
-
-        if (v110EntryIndex > -1) {
-          const v110Entry = sortedGroups.splice(v110EntryIndex, 1)[0];
-          // Insert v1.10 at the second to last position
-          sortedGroups.splice(sortedGroups.length - 1, 0, v110Entry);
-        }
-
-        return sortedGroups;
+    return Array.from(groups.values());
   }
 
   const getTypeIcon = (type: string) => {
@@ -111,12 +87,10 @@ loadChangelog();
     }
   };
 
-  const { t } = useTranslation();
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-400">{t('common.loading')}</div>
+        <div className="text-gray-400">Loading changelog...</div>
       </div>
     );
   }
@@ -128,12 +102,12 @@ loadChangelog();
         className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        {t('common.back')}
+        Back
       </button>
 
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">{t('changelog.title')}</h1>
-        <p className="text-gray-400">{t('changelog.subtitle')}</p>
+        <h1 className="text-3xl font-bold text-white mb-2">Changelog</h1>
+        <p className="text-gray-400">Track all updates, additions, and fixes to the platform</p>
       </div>
 
       <div className="space-y-6">
@@ -142,7 +116,7 @@ loadChangelog();
             <div className="flex items-baseline gap-3 mb-4">
               <h2 className="text-2xl font-bold text-white">v{release.version}</h2>
               <span className="text-sm text-gray-400">
-                {new Date(release.release_date).toLocaleDateString(t('common.locale'), {
+                {new Date(release.release_date).toLocaleDateString('de-DE', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -159,14 +133,14 @@ loadChangelog();
                   <div key={type}>
                     <h3 className={`text-sm font-semibold uppercase mb-2 flex items-center gap-2 ${getTypeColor(type)}`}>
                       {getTypeIcon(type)}
-                      {t(`changelog.type.${type}`)}
+                      {type}
                     </h3>
                     <ul className="space-y-1 ml-6">
                       {items.map((item) => (
                         <li key={item.id} className="text-gray-300 text-sm">
                           <span className="text-gray-500 mr-2">•</span>
-                          <span className="text-gray-500 text-xs uppercase mr-2">[{t(`changelog.category.${item.category}`)}]</span>
-                          {t(item.description)}
+                          <span className="text-gray-500 text-xs uppercase mr-2">[{item.category}]</span>
+                          {item.description}
                         </li>
                       ))}
                     </ul>
@@ -176,13 +150,13 @@ loadChangelog();
             </div>
           </div>
         ))}
-
-        {changelog.length === 0 && (
-          <div className="text-center py-12 bg-gray-900 border border-gray-800 rounded-lg">
-            <p className="text-gray-400">{t('changelog.noEntries')}</p>
-          </div>
-        )}
       </div>
+
+      {changelog.length === 0 && (
+        <div className="text-center py-12 bg-gray-900 border border-gray-800 rounded-lg">
+          <p className="text-gray-400">No changelog entries yet</p>
+        </div>
+      )}
     </div>
   );
 }

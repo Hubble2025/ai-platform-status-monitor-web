@@ -6,7 +6,6 @@ const languageFlags: Record<string, string> = {
   de: '🇩🇪',
   es: '🇪🇸',
   fr: '🇫🇷',
-  it: '🇮🇹',
 };
 
 const languageNames: Record<string, string> = {
@@ -14,7 +13,6 @@ const languageNames: Record<string, string> = {
   de: 'Deutsch',
   es: 'Español',
   fr: 'Français',
-  it: 'Italiano',
 };
 
 export function ThemeLanguageSwitcher() {

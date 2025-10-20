@@ -46,7 +46,7 @@ export function IncidentHistoryChart({ providerId }: IncidentHistoryChartProps) 
     return 'bg-green-500';
   };
 
-    const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'outage':
         return <XCircle className="w-3 h-3" />;

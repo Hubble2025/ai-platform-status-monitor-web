@@ -12,9 +12,7 @@ const ReliabilityDashboard = lazy(() => import('./components/ReliabilityDashboar
 const AdvancedSearch = lazy(() => import('./components/AdvancedSearch').then(m => ({ default: m.AdvancedSearch })));
 const SettingsPanel = lazy(() => import('./components/SettingsPanel').then(m => ({ default: m.SettingsPanel })));
 const Changelog = lazy(() => import('./components/Changelog').then(m => ({ default: m.Changelog })));
-const Impressum = lazy(() => import("./components/Impressum").then(m => ({ default: m.Impressum })));
-const Discovery = lazy(() => import("./components/Discovery").then(m => ({ default: m.Discovery })));
-const SuggestPlatform = lazy(() => import("./components/SuggestPlatform").then(m => ({ default: m.SuggestPlatform })));
+const Impressum = lazy(() => import('./components/Impressum').then(m => ({ default: m.Impressum })));
 
 type View =
   | { type: 'dashboard' }
@@ -23,9 +21,7 @@ type View =
   | { type: 'reliability' }
   | { type: 'search' }
   | { type: 'changelog' }
-  | { type: 'impressum' }
-  | { type: 'discovery' }
-  | { type: 'suggestPlatform' };
+  | { type: 'impressum' };
 
 function App() {
   const [view, setView] = useState<View>({ type: 'dashboard' });
@@ -41,8 +37,7 @@ function App() {
         onImpressumClick={() => setView({ type: 'impressum' })}
         onComparisonClick={() => setView({ type: 'comparison' })}
         onReliabilityClick={() => setView({ type: 'reliability' })}
-        onSearchClick={() => setView({ type: "search" })}
-        onDiscoveryClick={() => setView({ type: "discovery" })}
+        onSearchClick={() => setView({ type: 'search' })}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-safe">
@@ -63,16 +58,12 @@ function App() {
             <Changelog onBack={() => setView({ type: 'dashboard' })} />
           ) : view.type === 'impressum' ? (
             <Impressum onBack={() => setView({ type: 'dashboard' })} />
-          ) : view.type === 'provider' ? (
+          ) : (
             <ProviderDetail
               slug={view.slug}
-              onBack={() => setView({ type: "dashboard" })}
+              onBack={() => setView({ type: 'dashboard' })}
             />
-          ) : view.type === "discovery" ? (
-            <Discovery onBack={() => setView({ type: "dashboard" })} onSuggestPlatform={() => setView({ type: "suggestPlatform" })} />
-          ) : view.type === "suggestPlatform" ? (
-            <SuggestPlatform onBack={() => setView({ type: "discovery" })} />
-          ) : null}
+          )}
         </Suspense>
       </main>
 

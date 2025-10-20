@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Activity, Menu, X, FileText, Settings, Info, BarChart3, GitCompare, Search, Compass } from 'lucide-react';
+import { Activity, Menu, X, FileText, Settings, Info, BarChart3, GitCompare, Search } from 'lucide-react';
 import { ThemeLanguageSwitcher } from './ThemeLanguageSwitcher';
 import { useTheme } from '../contexts/ThemeContext';
 
-const APP_VERSION = '1.11';
+const APP_VERSION = '2.2.0';
 
 interface HeaderProps {
   onSettingsClick: () => void;
@@ -12,7 +12,6 @@ interface HeaderProps {
   onComparisonClick: () => void;
   onReliabilityClick: () => void;
   onSearchClick: () => void;
-  onDiscoveryClick: () => void;
 }
 
 export function Header({
@@ -22,7 +21,6 @@ export function Header({
   onComparisonClick,
   onReliabilityClick,
   onSearchClick,
-  onDiscoveryClick,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useTheme();
@@ -89,16 +87,6 @@ export function Header({
                 >
                   <Search className="w-4 h-4" />
                   <span>{t('nav.search')}</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    onDiscoveryClick();
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  <Compass className="w-4 h-4" />
-                  <span>{t("discovery.title")}</span>
                 </button>
                 <div className="border-t border-gray-800"></div>
                 <button
